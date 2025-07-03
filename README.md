@@ -4,11 +4,11 @@
 <h1 align="center">Nexus LED Scoreboard</h1>
 <br>
 <p align="center">
-    <a href="https://github.com/peteywhit/nexus-led-scoreboard/actions/workflows/ci.yml"><img src="https://github.com/peteywhit/nexus-led-scoreboard/actions/workflows/ci.yml/badge.svg?branch=dev&label=Dev+CI&style=for-the-badge"/></a>
-    &nbsp;&nbsp;<a href="https://github.com/peteywhit/nexus-led-scoreboard/actions/workflows/ci.yml"><img src="https://github.com/peteywhit/nexus-led-scoreboard/actions/workflows/ci.yml/badge.svg?branch=main&label=Main+CI&style=for-the-badge"/></a>
+    <a href="https://github.com/peteywhit/nexus-led-scoreboard/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/peteywhit/nexus-led-scoreboard/ci.yml?branch=dev&label=Dev+CI&style=for-the-badge&logo=github"/></a>
+    &nbsp;&nbsp;<a href="https://github.com/peteywhit/nexus-led-scoreboard/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/peteywhit/nexus-led-scoreboard/ci.yml?branch=main&label=Main+CI&style=for-the-badge&logo=github"/></a>
     <br><br>
     <a href="https://github.com/peteywhit/nexus-led-scoreboard/blob/main/LICENSE"><img src="https://img.shields.io/github/license/peteywhit/nexus-led-scoreboard?style=for-the-badge"/></a>
-    &nbsp;&nbsp;<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge"/></a>
+    &nbsp;&nbsp;<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white"/></a>
     <br><br>
     <a href="https://buymeacoffee.com/peteywhit"><img src="https://img.shields.io/badge/-buy_me_a_coffee-%23FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black"/></a>
 </p>
