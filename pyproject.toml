@@ -9,7 +9,6 @@ dependencies = [
     # Add your core project dependencies here as you identify them, e.g.:
     # "requests>=2.28",
     # "mlb-statsapi", # You'll likely need to find/add specific sport APIs later
-    "rpi-rgb-led-matrix", # Hardware specific, might be installed separately
 ]
 requires-python = ">=3.8" # Or your desired minimum Python version
 license = { text = "MIT" }

@@ -32,6 +32,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip # Ensure pip is up-to-counter
         pip install ruff pytest pytest-cov # Install essential dev dependencies
+        # Install the project's pure Python dependencies from pyproject.toml
+        # Note: Hardware-specific dependencies like rpi-rgb-led-matrix are installed
+        # directly on the Raspberry Pi as per README instructions.
+        pip install .
 
     - name: Lint with Ruff
       run: |

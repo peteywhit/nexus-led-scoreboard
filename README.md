@@ -67,6 +67,28 @@ This section will guide you through setting up your own Nexus LED Scoreboard.
 * Python 3.8+ installed
 * Basic understanding of command line operations
 
+### Hardware Setup (for Raspberry Pi LED Matrix)
+The `rpi-rgb-led-matrix` library, essential for driving the LED panels, requires specific compilation on a Raspberry Pi.
+**Note:** This library cannot be installed directly via `pip` on standard development machines (like your Windows PC or GitHub Actions runners) as it's tightly coupled to Raspberry Pi's GPIO.
+
+**On your Raspberry Pi, follow these steps:**
+1.  **Update your system:**
+    ```bash
+    sudo apt update && sudo apt upgrade
+    ```
+2.  **Install build tools and Python development headers:**
+    ```bash
+    sudo apt install -y python3-dev libatlas-base-dev git
+    ```
+3.  **Clone and build `rpi-rgb-led-matrix`:**
+    ```bash
+    git clone [https://github.com/hzeller/rpi-rgb-led-matrix.git](https://github.com/hzeller/rpi-rgb-led-matrix.git)
+    cd rpi-rgb-led-matrix
+    make build-python PYTHON=$(which python3) # Or specify your Python version
+    sudo make install-python PYTHON=$(which python3)
+    ```
+    *(This assumes you'll build and install it globally or within a Pi-specific virtual environment.)*
+
 ### Initial Setup (Local Development)
 
 1.  **Clone the repository:**
