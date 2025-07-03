@@ -1,3 +1,6 @@
+>[!CAUTION]
+> This project is currently under heavy development. Expect rapid changes and evolving features!
+
 <h1 align="center">Nexus LED Scoreboard</h1>
 <br>
 <p align="center">
@@ -19,15 +22,6 @@
 [![GitHub stars](https://img.shields.io/github/stars/peteywhit/nexus-led-scoreboard?style=social)](https://github.com/peteywhit/nexus-led-scoreboard/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/peteywhit/nexus-led-scoreboard?style=social)](https://github.com/peteywhit/nexus-led-scoreboard/network/members)-->
 
----
-
-## ⚠️ Important Notice ⚠️
-<p align="center">
-    <b>This project is currently under heavy development. Expect rapid changes and evolving features!</b>
-</p>
-
->[!CAUTION]
-> This project is currently under heavy development. Expect rapid changes and evolving features!
 
 ---
 
