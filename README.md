@@ -10,7 +10,7 @@
     <a href="https://github.com/peteywhit/nexus-led-scoreboard/blob/main/LICENSE"><img src="https://img.shields.io/github/license/peteywhit/nexus-led-scoreboard?style=for-the-badge"/></a>
     &nbsp;&nbsp;<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white"/></a>
     <br><br>
-    <a href="https://buymeacoffee.com/peteywhit"><img src="https://img.shields.io/badge/-buy_me_a_coffee-%23FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black"/></a>
+    <a href="https://buymeacoffee.com/peteywhit"><img src="https://img.shields.io/badge/-buy_me_a_coke-%23FFDD00?style=for-the-badge&logo=coca-cola&logoSize=auto&logoColor=black"/></a>
 </p>
 
 <!--[![Dev CI - dev Branch](https://github.com/peteywhit/nexus-led-scoreboard/actions/workflows/ci.yml/badge.svg?branch=dev&label=Dev+CI&style=for-the-badge)](https://github.com/peteywhit/nexus-led-scoreboard/actions/workflows/ci.yml)
