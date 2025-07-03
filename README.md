@@ -7,7 +7,7 @@
     <a href="https://github.com/peteywhit/nexus-led-scoreboard/blob/main/LICENSE"><img src="https://img.shields.io/github/license/peteywhit/nexus-led-scoreboard?style=for-the-badge"/></a>
     &nbsp;&nbsp;<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge"/></a>
     <br><br>
-    <a href="https%3A%2F%2Fbuymeacoffee.com%2Fpeteywhit"><img src="https://img.shields.io/badge/-buy_me_a_coffee-%23FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black&link=https%3A%2F%2Fbuymeacoffee.com%2Fpeteywhit"/></a>
+    <a href="https://buymeacoffee.com/peteywhit"><img src="https://img.shields.io/badge/-buy_me_a_coffee-%23FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black"/></a>
 </p>
 
 <!--[![Dev CI - dev Branch](https://github.com/peteywhit/nexus-led-scoreboard/actions/workflows/ci.yml/badge.svg?branch=dev&label=Dev+CI&style=for-the-badge)](https://github.com/peteywhit/nexus-led-scoreboard/actions/workflows/ci.yml)
@@ -25,6 +25,9 @@
 <p align="center">
     <b>This project is currently under heavy development. Expect rapid changes and evolving features!</b>
 </p>
+
+>[!CAUTION]
+> This project is currently under heavy development. Expect rapid changes and evolving features!
 
 ---
 
