@@ -115,11 +115,51 @@ The `rpi-rgb-led-matrix` library, essential for driving the LED panels, requires
     ruff format .
     pytest
     ```
+---
+### Running for Development
 
-### Running the Scoreboard (Placeholder)
+Once you have completed the [Prerequisites](#prerequisites) and [Hardware Setup](#hardware-setup-for-raspberry-pi-led-matrix) (if applicable), you can run the Nexus LED Scoreboard application.
 
-Detailed instructions for running the scoreboard on your hardware will be provided here.
+Make sure your Python virtual environment is activated. From the project's root directory, execute the main application module:
 
 ```bash
-# Example command (will be updated)
-python src/nexus_led_scoreboard/main.py
+python -m nexus_led_scoreboard.main
+```
+---
+### Deployment on Raspberry Pi
+
+For running the Nexus LED Scoreboard application on a dedicated Raspberry Pi, the setup involves preparing the hardware-specific library and then installing the application as a system-wide package or within a dedicated virtual environment on the Pi.
+
+**Before Deployment:**
+
+Ensure you have followed the [Hardware Setup (for Raspberry Pi LED Matrix)](#hardware-setup-for-raspberry-pi-led-matrix) instructions on your Raspberry Pi. This is critical for the `rpi-rgb-led-matrix` library to be available.
+
+**Deployment Steps:**
+
+1.  **Clone the Repository on your Raspberry Pi:**
+    If you haven't already, clone the project directly onto your Raspberry Pi:
+    ```bash
+    git clone [https://github.com/peteywhit/nexus-led-scoreboard.git](https://github.com/peteywhit/nexus-led-scoreboard.git)
+    cd nexus-led-scoreboard
+    ```
+
+2.  **(Recommended) Create a Dedicated Virtual Environment (on Pi):**
+    It's good practice to install your application and its dependencies into a virtual environment even on the Pi, to avoid conflicts with system-wide Python packages.
+    ```bash
+    python3 -m venv venv_scoreboard
+    source venv_scoreboard/bin/activate
+    ```
+
+3.  **Install the Nexus LED Scoreboard Application:**
+    While inside the `nexus-led-scoreboard` directory and with your virtual environment activated (if you created one), install the application:
+    ```bash
+    pip install .
+    ```
+    This command installs your `nexus-led-scoreboard` package and its pure Python dependencies (like `requests`) into the active environment. It relies on the `rpi-rgb-led-matrix` library already being compiled and installed on the system as per the Hardware Setup.
+
+4.  **Run the Installed Application:**
+    After installation, you can run the application. We will define a simple console script entry point in a future step to make this even easier (e.g., `nexus-scoreboard`), but for now, you can run it as:
+    ```bash
+    python -m nexus_led_scoreboard.main
+    ```
+    *(In a production setup, you would typically configure this to run automatically at boot using a system service like `systemd`.)*

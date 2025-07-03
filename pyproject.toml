@@ -6,8 +6,8 @@ authors = [
     { name = "peteywhit", email = "peteywhit@outlook.com" },
 ]
 dependencies = [
+    "requests>=2.28.1", # For making HTTP requests to APIs
     # Add your core project dependencies here as you identify them, e.g.:
-    # "requests>=2.28",
     # "mlb-statsapi", # You'll likely need to find/add specific sport APIs later
 ]
 requires-python = ">=3.8" # Or your desired minimum Python version
