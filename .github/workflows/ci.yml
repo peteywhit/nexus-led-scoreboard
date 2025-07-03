@@ -1,0 +1,46 @@
+name: Python CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev # Run CI on pushes to main and dev branches
+  pull_request:
+    branches:
+      - main
+      - dev # Run CI on pull requests targeting main and dev
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Test on multiple Python versions for broader compatibility
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4 # Use v4 of the checkout action
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5 # Use v5 of the setup-python action
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip' # Cache pip dependencies to speed up builds
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip # Ensure pip is up-to-counter
+        pip install ruff pytest pytest-cov # Install essential dev dependencies
+
+    - name: Lint with Ruff
+      run: |
+        ruff check .
+        ruff format . --check # Check formatting without applying changes (for CI)
+
+    - name: Run tests with pytest
+      run: |
+        # Add src to PYTHONPATH temporarily for testing, as it's not a installed package yet
+        export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+        pytest --cov=src/nexus_led_scoreboard --cov-report=xml --cov-report=term-missing tests/
+      # Optional: Add --cov-report=html to generate an HTML coverage report
