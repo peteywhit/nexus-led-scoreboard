@@ -4,7 +4,7 @@ import os
 # Add the src directory to the Python path to allow imports from your package
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
-from nexus_led_scoreboard.main import run_scoreboard
+from main import run_scoreboard
 
 
 def test_run_scoreboard_placeholder(capsys):

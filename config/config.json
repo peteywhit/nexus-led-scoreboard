@@ -1,0 +1,72 @@
+{
+    "logging": {
+        "console_level": "INFO",
+        "file_level": "DEBUG"
+    },
+    "sports": {
+        "baseball": {
+            "leagues": [
+                {
+                    "id": "mlb",
+                    "favorite_team_ids": [
+                        "15",
+                        "2",
+                        "7"
+                    ]
+                }
+            ]
+        },
+        "basketball": {
+            "leagues": [
+                {
+                    "id": "nba",
+                    "favorite_team_ids": [
+                        "3"
+                    ]
+                }
+            ]
+        },
+        "soccer": {
+            "leagues": [
+                {
+                    "id": "usa.1",
+                    "favorite_team_ids": [
+                        "18986"
+                    ]
+                },
+                {
+                    "id": "eng.1",
+                    "favorite_team_ids": [
+                        "359",
+                        "382",
+                        "367"
+                    ]
+                },
+                {
+                    "id": "eng.2",
+                    "favorite_team_ids": [
+                        "352"
+                    ]
+                }
+            ]
+        }
+    },
+    "refresh_intervals": {
+        "pregame": 1800,
+        "in_progress_all_games": 15,
+        "in_progress_favorite_team": 5,
+        "completed_games": 21600,
+        "full_scoreboard_daily": 3600
+    },
+    "display": {
+        "matrix_rows": 32,
+        "matrix_cols": 64,
+        "matrix_series": 3,
+        "matrix_parallel": 2,
+        "emulator_pixel_size": 16
+    },
+    "weather": {
+        "location": "Crystal Springs, MS, US",
+        "api_key": "29ef5327b0c20314daad8ecfc5856cfa"
+    }
+}
