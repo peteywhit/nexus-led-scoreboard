@@ -4,7 +4,6 @@ import sys
 import logging
 from dotenv import load_dotenv
 
-# --- Adjust Python path to include 'src' directory for imports ---
 project_root = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(project_root, "src"))
 
@@ -42,16 +41,11 @@ def main():
 
     # 2. Setup Logging based on loaded configuration
     logging_config = app_config.get("logging", {})
-    console_level = logging_config.get(
-        "console_level", "INFO"
-    )  # Default to INFO if not in config
-    file_level = logging_config.get(
-        "file_level", "DEBUG"
-    )  # Default to DEBUG if not in config
+    console_level = logging_config.get("console_level", "INFO")
+    file_level = logging_config.get("file_level", "DEBUG")
 
     setup_logging(console_level=console_level, file_level=file_level)
 
-    # Get a logger for the main application entry point
     logger = logging.getLogger(__name__)
     logger.info("Application starting...")
     logger.debug(f"Loaded configuration: {json.dumps(app_config, indent=2)}")
