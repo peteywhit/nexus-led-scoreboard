@@ -18,6 +18,10 @@ dist/
 .mypy_cache/
 .coverage
 .ruff_cache/
+.env
+*.env
+logs/
+.venv
 
 # Editors
 .vscode/

@@ -1,0 +1,59 @@
+{
+    "logging": {
+        "console_level": "INFO",
+        "file_level": "DEBUG"
+    },
+    "sports": {
+        "mlb": {
+            "enabled": true,
+            "favorite_teams": ["Atlanta Braves", "New York Yankees"]
+        },
+        "nba": {
+            "enabled": false,
+            "favorite_teams": []
+        }
+    },
+    "refresh_intervals": {
+        "in_progress_favorite_team": 30,
+        "in_progress_other_games": 60,
+        "pre_game_post_game": 300,
+        "no_games": 900
+    },
+    "display_settings": {
+        "matrix_rows": 32,
+        "matrix_cols": 64,
+        "hardware_mapping": "adafruit-hdp5",
+        "default_display_time_per_board_sec": 10,
+        "live_mode_enabled": true
+    },
+    "weather": {
+        "enabled": true,
+        "location": "New York, NY, US",
+        "units": "imperial",
+        "refresh_interval_sec": 600
+        // Note: api_key is NOT here, it comes from .env
+    },
+    "display_modes": {
+        "active_game_rotation_time_sec": 10,
+        "live_favorites": {
+            "priority": 1,
+            "boards": ["live_game_favorite_team"],
+            "transition_to_next_sport_when_no_favorites": false
+        },
+        "in_progress_games": {
+            "priority": 2,
+            "boards": ["live_game_all_sports"]
+        },
+        "pre_game_scheduled": {
+            "priority": 3,
+            "boards": ["clock", "weather", "game_preview_favorite", "game_preview_all"]
+        },
+        "no_games_today": {
+            "priority": 4,
+            "boards": ["clock", "weather", "custom_message_1"]
+        }
+    },
+    "custom_messages": [
+        {"id": "custom_message_1", "text": "Welcome to Nexus Scoreboard!", "duration_sec": 10}
+    ]
+}
