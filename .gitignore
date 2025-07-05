@@ -34,4 +34,7 @@ Thumbs.db
 # Other common files
 *.log
 *.sqlite3
+
+# Project files
 config/config.json
+cache/
