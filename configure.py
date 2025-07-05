@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 import questionary
 import requests # Keep requests for API key validation
 

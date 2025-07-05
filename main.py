@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 project_root = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(project_root, 'src'))
 
-from nexus_led_scoreboard.logger import setup_logging
-from nexus_led_scoreboard.scoreboard_manager import ScoreboardManager
+from nexus_led_scoreboard.logger import setup_logging  # noqa: E402
+from nexus_led_scoreboard.scoreboard_manager import ScoreboardManager  # noqa: E402
 
 
 def main():

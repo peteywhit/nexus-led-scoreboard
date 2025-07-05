@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
 class Team:
@@ -75,9 +75,12 @@ class Game:
 
     def __repr__(self):
         status = ""
-        if self.is_completed: status = "Final"
-        elif self.is_in_progress: status = "Live"
-        else: status = self.date.strftime("%I:%M %p").lstrip('0')
+        if self.is_completed:
+            status = "Final"
+        elif self.is_in_progress:
+            status = "Live"
+        else:
+            status = self.date.strftime("%I:%M %p").lstrip('0')
         return (f"Game({self.away_team.abbreviation} {self.away_score.value} vs "
                 f"{self.home_team.abbreviation} {self.home_score.value} | {status})")
 
