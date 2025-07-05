@@ -13,6 +13,7 @@ class ESPNAPIFetcher:
     A class to fetch and cache data from the ESPN API endpoints.
     Implements basic rate limiting.
     """
+
     BASE_URL = "https://site.api.espn.com/apis/site/v2/sports"
 
     CACHE_DIR = os.path.join(os.path.dirname(__file__), "cache")
@@ -23,7 +24,13 @@ class ESPNAPIFetcher:
         os.makedirs(self.CACHE_DIR, exist_ok=True)
         self._last_request_time = 0
 
-    def _get_cache_path(self, endpoint_url: str, params: dict = None, game_id: str = None, teams_endpoint: bool = False) -> str:
+    def _get_cache_path(
+        self,
+        endpoint_url: str,
+        params: dict = None,
+        game_id: str = None,
+        teams_endpoint: bool = False,
+    ) -> str:
         """
         Generates a unique file path for caching based on the URL, parameters,
         optional game ID, or indicating it's a teams endpoint.
@@ -33,20 +40,28 @@ class ESPNAPIFetcher:
         elif teams_endpoint:
             # For teams endpoint, generate a filename specific to sport/league
             # endpoint_url format: .../sports/{sport}/{league}/teams
-            parts = endpoint_url.split('/')
+            parts = endpoint_url.split("/")
             sport = parts[-3] if len(parts) >= 3 else "unknown_sport"
             league = parts[-2] if len(parts) >= 2 else "unknown_league"
 
             # Include parameters (like 'limit') in the cache filename for teams endpoint
-            param_str = "_".join(f"{k}-{v}" for k, v in sorted(params.items())) if params else ""
+            param_str = (
+                "_".join(f"{k}-{v}" for k, v in sorted(params.items()))
+                if params
+                else ""
+            )
             if param_str:
                 filename = f"teams_{sport}_{league}_{param_str}.json"
             else:
                 filename = f"teams_{sport}_{league}.json"
         else:
-            param_str = "_".join(f"{k}-{v}" for k, v in sorted(params.items())) if params else ""
+            param_str = (
+                "_".join(f"{k}-{v}" for k, v in sorted(params.items()))
+                if params
+                else ""
+            )
             filename = f"{endpoint_url.replace('https://', '').replace('/', '_').replace('.', '_')}_{param_str}.json"
-            filename = filename[:200] # truncate to avoid excessively long names
+            filename = filename[:200]  # truncate to avoid excessively long names
         return os.path.join(self.CACHE_DIR, filename)
 
     def _load_from_cache(self, cache_path: str) -> dict | None:
@@ -54,7 +69,7 @@ class ESPNAPIFetcher:
         if os.path.exists(cache_path):
             logger.debug(f"Loading from cache: {cache_path}")
             try:
-                with open(cache_path, 'r', encoding='utf-8') as f:
+                with open(cache_path, "r", encoding="utf-8") as f:
                     return json.load(f)
             except json.JSONDecodeError as e:
                 logger.error(f"Error decoding JSON from cache {cache_path}: {e}")
@@ -64,7 +79,7 @@ class ESPNAPIFetcher:
     def _save_to_cache(self, cache_path: str, data: dict):
         """Saves data to cache."""
         try:
-            with open(cache_path, 'w', encoding='utf-8') as f:
+            with open(cache_path, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
             logger.debug(f"Saved to cache: {cache_path}")
         except IOError as e:
@@ -94,7 +109,7 @@ class ESPNAPIFetcher:
         endpoint_base = f"{self.BASE_URL}/{sport}/{league}/scoreboard"
         params = {}
         if date:
-            params['dates'] = date
+            params["dates"] = date
 
         cache_path = self._get_cache_path(endpoint_base, params=params)
         cached_data = self._load_from_cache(cache_path)
@@ -104,7 +119,9 @@ class ESPNAPIFetcher:
 
         self._apply_rate_limit()
 
-        logger.info(f"Fetching new data for scoreboard from: {endpoint_base} with params: {params}")
+        logger.info(
+            f"Fetching new data for scoreboard from: {endpoint_base} with params: {params}"
+        )
         try:
             response = requests.get(endpoint_base, params=params)
             response.raise_for_status()
@@ -112,7 +129,9 @@ class ESPNAPIFetcher:
             self._save_to_cache(cache_path, json_data)
             return json_data
         except requests.exceptions.HTTPError as http_err:
-            logger.error(f"HTTP error occurred: {http_err} (Status: {response.status_code})")
+            logger.error(
+                f"HTTP error occurred: {http_err} (Status: {response.status_code})"
+            )
         except requests.exceptions.ConnectionError as conn_err:
             logger.error(f"Connection error occurred: {conn_err}")
         except requests.exceptions.Timeout as timeout_err:
@@ -151,7 +170,9 @@ class ESPNAPIFetcher:
             self._save_to_cache(cache_path, json_data)
             return json_data
         except requests.exceptions.HTTPError as http_err:
-            logger.error(f"HTTP error occurred: {http_err} (Status: {response.status_code})")
+            logger.error(
+                f"HTTP error occurred: {http_err} (Status: {response.status_code})"
+            )
         except requests.exceptions.ConnectionError as conn_err:
             logger.error(f"Connection error occurred: {conn_err}")
         except requests.exceptions.Timeout as timeout_err:
@@ -173,7 +194,7 @@ class ESPNAPIFetcher:
             dict: The JSON response containing team data, or an empty dict on error.
         """
         endpoint = f"{self.BASE_URL}/{sport}/{league}/teams"
-        params = {'limit': limit} # Add the limit parameter
+        params = {"limit": limit}  # Add the limit parameter
 
         # Use a specific cache path for teams data, including the limit in filename
         cache_path = self._get_cache_path(endpoint, params=params, teams_endpoint=True)
@@ -186,13 +207,17 @@ class ESPNAPIFetcher:
 
         logger.info(f"Fetching team data from: {endpoint} with limit={limit}")
         try:
-            response = requests.get(endpoint, params=params) # Pass params to requests.get
+            response = requests.get(
+                endpoint, params=params
+            )  # Pass params to requests.get
             response.raise_for_status()
             json_data = response.json()
             self._save_to_cache(cache_path, json_data)
             return json_data
         except requests.exceptions.HTTPError as http_err:
-            logger.error(f"HTTP error occurred: {http_err} (Status: {response.status_code})")
+            logger.error(
+                f"HTTP error occurred: {http_err} (Status: {response.status_code})"
+            )
         except requests.exceptions.ConnectionError as conn_err:
             logger.error(f"Connection error occurred: {conn_err}")
         except requests.exceptions.Timeout as timeout_err:
