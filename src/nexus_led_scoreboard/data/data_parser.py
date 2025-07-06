@@ -1,221 +1,224 @@
+import logging
 from datetime import datetime
+from typing import List, Dict, Any, Optional
 
-
-class Team:
-    """Represents a sports team."""
-
-    def __init__(
-        self,
-        id: str,
-        name: str,
-        display_name: str,
-        abbreviation: str,
-        logo: str = None,
-        color: str = None,
-    ):
-        self.id = id
-        self.name = name
-        self.display_name = display_name
-        self.abbreviation = abbreviation
-        self.logo = logo
-        self.color = color
-
-    def __repr__(self):
-        return f"Team({self.abbreviation})"
-
-
-class Score:
-    """Represents a team's score."""
-
-    def __init__(self, value: int):
-        self.value = value
-
-    def __repr__(self):
-        return f"Score({self.value})"
+logger = logging.getLogger(__name__)
 
 
 class Game:
-    """Represents a single game."""
+    """
+    Represents a single parsed game event with key attributes for display logic.
+    """
 
     def __init__(
         self,
-        id: str,
-        date: datetime,
-        name: str,
-        short_name: str,
-        status_type_id: str,  # e.g., '1' for pre, '2' for in, '3' for post
-        status_display_clock: float,  # seconds left in period/game
-        status_display_period: int,
-        home_team: Team,
-        away_team: Team,
-        home_score: Score,
-        away_score: Score,
-        competitors_detail: list,  # Raw competitor details for more info
-        event_link: str = None,
-        is_completed: bool = False,
-        is_in_progress: bool = False,
-        is_pregame: bool = False,
+        game_id: str,
+        sport: str,
+        league: str,
+        start_time: datetime,
+        status_state: str,  # e.g., 'pre', 'in_progress', 'post'
+        status_detail: str,  # e.g., 'Final', 'In Progress, 3rd Quarter'
+        home_team_id: str,
+        home_team_name: str,
+        home_team_abbrev: str,
+        home_score: Optional[int],
+        away_team_id: str,
+        away_team_name: str,
+        away_team_abbrev: str,
+        away_score: Optional[int],
+        is_favorite: bool = False,
     ):
-        self.id = id
-        self.date = date  # datetime object of game start
-        self.name = name
-        self.short_name = short_name
-        self.status_type_id = status_type_id
-        self.status_display_clock = status_display_clock
-        self.status_display_period = status_display_period
-        self.home_team = home_team
-        self.away_team = away_team
+        self.game_id = game_id
+        self.sport = sport
+        self.league = league
+        self.start_time = start_time
+        self.status_state = status_state
+        self.status_detail = status_detail
+        self.home_team_id = home_team_id
+        self.home_team_name = home_team_name
+        self.home_team_abbrev = home_team_abbrev
         self.home_score = home_score
+        self.away_team_id = away_team_id
+        self.away_team_name = away_team_name
+        self.away_team_abbrev = away_team_abbrev
         self.away_score = away_score
-        self.competitors_detail = (
-            competitors_detail  # Keep raw for future parsing needs
-        )
-        self.event_link = event_link
-
-        # Simplified status flags for convenience
-        self.is_completed = (status_type_id == "3") or is_completed
-        self.is_in_progress = (status_type_id == "2") or is_in_progress
-        self.is_pregame = (status_type_id == "1") or is_pregame
+        self.is_favorite = is_favorite
 
     @property
-    def current_period_and_clock(self):
-        """Returns formatted period and clock, e.g., 'Q3 5:30' or 'Final'."""
-        if self.is_completed:
-            return "Final"
-        elif self.is_in_progress:
-            minutes = int(self.status_display_clock // 60)
-            seconds = int(self.status_display_clock % 60)
-            return f"Q{self.status_display_period} {minutes}:{seconds:02d}"
-        else:  # Pregame
-            return self.date.strftime("%I:%M %p").lstrip("0")  # e.g., "7:00 PM"
+    def is_live(self) -> bool:
+        return self.status_state == "in_progress"
+
+    @property
+    def is_pregame(self) -> bool:
+        return self.status_state == "pre"
+
+    @property
+    def is_postgame(self) -> bool:
+        return self.status_state == "post"
 
     def __repr__(self):
-        status = ""
-        if self.is_completed:
-            status = "Final"
-        elif self.is_in_progress:
-            status = "Live"
-        else:
-            status = self.date.strftime("%I:%M %p").lstrip("0")
+        fav_str = "(Fav) " if self.is_favorite else ""
+        score_str = (
+            f" ({self.away_score}-{self.home_score})"
+            if self.is_live or self.is_postgame
+            else ""
+        )
         return (
-            f"Game({self.away_team.abbreviation} {self.away_score.value} vs "
-            f"{self.home_team.abbreviation} {self.home_score.value} | {status})"
+            f"Game({fav_str}{self.away_team_abbrev} vs {self.home_team_abbrev} "
+            f"[{self.sport}/{self.league}] - {self.status_detail}{score_str} "
+            f"starts: {self.start_time.strftime('%H:%M')})"
         )
 
 
 class ESPNDataParser:
     """
-    Parses raw JSON data from ESPN API into structured Python objects.
+    Parses raw ESPN API JSON response into a list of Game objects.
     """
 
-    def parse_scoreboard_data(self, raw_json: dict) -> list[Game]:
+    def __init__(self, favorite_team_ids: Dict[str, List[str]]):
         """
-        Parses the raw JSON response from the scoreboard endpoint into a list of Game objects.
+        Args:
+            favorite_team_ids (Dict[str, List[str]]): A dictionary mapping league_id to
+                                                        a list of favorite team IDs in that league.
+                                                        E.g., {"nfl": ["1", "2"], "mlb": ["3"]}
         """
-        games = []
-        if not raw_json or "events" not in raw_json:
-            print("Warning: No events found in raw scoreboard JSON.")
-            return games
+        self.favorite_team_ids = favorite_team_ids
+        logger.info("ESPNDataParser initialized.")
 
-        for event in raw_json["events"]:
+    def parse_events(self, raw_data: Dict[str, Any]) -> List[Game]:
+        """
+        Parses raw ESPN API event data into a list of Game objects.
+
+        Args:
+            raw_data (Dict[str, Any]): The raw JSON response from ESPNAPIFetcher.get_events().
+
+        Returns:
+            List[Game]: A list of parsed Game objects.
+        """
+        games: List[Game] = []
+        if not raw_data or "events" not in raw_data:
+            logger.debug("No 'events' found in raw data for parsing.")
+            return []
+
+        sport_slug = None
+        if raw_data and "sport" in raw_data and isinstance(raw_data["sport"], dict):
+            sport_slug = raw_data["sport"].get("slug")
+
+        league_slug = None
+        if (
+            raw_data
+            and "leagues" in raw_data
+            and isinstance(raw_data["leagues"], list)
+            and len(raw_data["leagues"]) > 0
+        ):
+            first_league = raw_data["leagues"][0]
+            if isinstance(first_league, dict):
+                league_slug = first_league.get("slug")
+
+        for event_data in raw_data["events"]:
             try:
-                # Basic Event Info
-                game_id = event["id"]
-                game_date_str = event["date"]  # e.g., '2025-07-03T18:05Z'
-                # Parse date string to datetime object. Handle timezone if needed.
-                # For simplicity, assuming UTC if 'Z' is present, otherwise naive.
-                if game_date_str.endswith("Z"):
-                    game_date = datetime.strptime(game_date_str, "%Y-%m-%dT%H:%MZ")
-                else:
-                    game_date = datetime.strptime(game_date_str, "%Y-%m-%dT%H:%M")
-
-                game_name = event.get("name", "N/A")
-                game_short_name = event.get("shortName", "N/A")
-
-                # Status Info
-                status_type_id = event["status"]["type"][
-                    "id"
-                ]  # '1':pre, '2':in, '3':post
-                status_display_clock = event["status"]["clock"]
-                status_display_period = event["status"]["period"]
-
-                # Competitors (Teams and Scores)
-                competitors_data = event["competitions"][0]["competitors"]
-                home_competitor_data = next(
-                    (c for c in competitors_data if c["homeAway"] == "home"), None
-                )
-                away_competitor_data = next(
-                    (c for c in competitors_data if c["homeAway"] == "away"), None
+                game_id = event_data.get("id")
+                start_time_str = event_data.get("date")
+                start_time = (
+                    datetime.fromisoformat(start_time_str.replace("Z", "+00:00"))
+                    if start_time_str
+                    else None
                 )
 
-                if not home_competitor_data or not away_competitor_data:
-                    print(
-                        f"Warning: Could not find home/away competitors for game ID {game_id}"
+                status_info = event_data.get("status", {}).get("type", {})
+                status_state = status_info.get("state")  # 'pre', 'in_progress', 'post'
+                status_detail = status_info.get(
+                    "detail"
+                )  # 'Final', 'In Progress', 'Scheduled', etc.
+
+                competitions = event_data.get("competitions", [])
+                if not competitions:
+                    logger.warning(
+                        f"No competitions found for event {game_id}. Skipping."
                     )
                     continue
 
-                home_team_data = home_competitor_data["team"]
-                away_team_data = away_competitor_data["team"]
+                competition_data = competitions[0]
+                competitors = competition_data.get("competitors", [])
 
-                home_team = Team(
-                    id=home_team_data["id"],
-                    name=home_team_data["name"],
-                    display_name=home_team_data.get(
-                        "displayName", home_team_data["name"]
-                    ),
-                    abbreviation=home_team_data["abbreviation"],
-                    logo=home_team_data.get("logo"),
-                    color=home_team_data.get("color"),
+                home_team_data = next(
+                    (comp for comp in competitors if comp.get("homeAway") == "home"), {}
                 )
-                away_team = Team(
-                    id=away_team_data["id"],
-                    name=away_team_data["name"],
-                    display_name=away_team_data.get(
-                        "displayName", away_team_data["name"]
-                    ),
-                    abbreviation=away_team_data["abbreviation"],
-                    logo=away_team_data.get("logo"),
-                    color=away_team_data.get("color"),
+                away_team_data = next(
+                    (comp for comp in competitors if comp.get("homeAway") == "away"), {}
                 )
 
-                home_score = Score(int(home_competitor_data.get("score", 0)))
-                away_score = Score(int(away_competitor_data.get("score", 0)))
+                home_team_info = home_team_data.get("team", {})
+                away_team_info = away_team_data.get("team", {})
 
-                event_link = next(
-                    (
-                        link["href"]
-                        for link in event.get("links", [])
-                        if link.get("rel") == ["summary", "boxscore"]
-                    ),
-                    None,
+                home_team_id = home_team_info.get("id")
+                home_team_name = home_team_info.get(
+                    "displayName", home_team_info.get("name")
                 )
+                home_team_abbrev = home_team_info.get("abbreviation")
+                raw_home_score = home_team_data.get("score")
+                if isinstance(raw_home_score, dict) and "value" in raw_home_score:
+                    home_score = raw_home_score.get("value")
+                else:
+                    home_score = raw_home_score
 
-                game = Game(
-                    id=game_id,
-                    date=game_date,
-                    name=game_name,
-                    short_name=game_short_name,
-                    status_type_id=status_type_id,
-                    status_display_clock=status_display_clock,
-                    status_display_period=status_display_period,
-                    home_team=home_team,
-                    away_team=away_team,
-                    home_score=home_score,
-                    away_score=away_score,
-                    competitors_detail=event["competitions"][0][
-                        "competitors"
-                    ],  # Store raw details
-                    event_link=event_link,
+                away_team_id = away_team_info.get("id")
+                away_team_name = away_team_info.get(
+                    "displayName", away_team_info.get("name")
                 )
-                games.append(game)
+                away_team_abbrev = away_team_info.get("abbreviation")
+                raw_away_score = away_team_data.get("score")
+                if isinstance(raw_away_score, dict) and "value" in raw_away_score:
+                    away_score = raw_away_score.get("value")
+                else:
+                    away_score = raw_away_score
 
-            except KeyError as e:
-                print(
-                    f"Error parsing game data (missing key: {e}) for event: {event.get('id', 'N/A')}. Skipping."
-                )
+                # Determine if it's a favorite game
+                is_favorite = False
+                if league_slug:
+                    favorite_ids_for_league = self.favorite_team_ids.get(
+                        league_slug, []
+                    )
+                    is_favorite = (
+                        str(home_team_id) in favorite_ids_for_league
+                        or str(away_team_id) in favorite_ids_for_league
+                    )
+                else:
+                    logger.warning(
+                        f"Could not determine league slug for event {game_id}. Skipping favorite check."
+                    )
+
+                # Check if all required fields are present
+                if all([game_id, start_time, status_state, home_team_id, away_team_id]):
+                    games.append(
+                        Game(
+                            game_id=game_id,
+                            sport=sport_slug,
+                            league=league_slug,
+                            start_time=start_time,
+                            status_state=status_state,
+                            status_detail=status_detail,
+                            home_team_id=home_team_id,
+                            home_team_name=home_team_name,
+                            home_team_abbrev=home_team_abbrev,
+                            home_score=home_score,
+                            away_team_id=away_team_id,
+                            away_team_name=away_team_name,
+                            away_team_abbrev=away_team_abbrev,
+                            away_score=away_score,
+                            is_favorite=is_favorite,
+                        )
+                    )
+                else:
+                    logger.warning(
+                        f"Skipping game {game_id} due to missing critical data: {event_data.keys()}"
+                    )
+
             except Exception as e:
-                print(
-                    f"An unexpected error occurred parsing game data for event: {event.get('id', 'N/A')}. Error: {e}. Skipping."
+                logger.error(
+                    f"Error parsing event data: {e} - Raw event: {event_data}",
+                    exc_info=True,
                 )
 
+        logger.debug(f"Parsed {len(games)} games from raw data.")
         return games
