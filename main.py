@@ -48,7 +48,6 @@ def main():
 
     logger = logging.getLogger(__name__)
     logger.info("Application starting...")
-    #    logger.debug(f"Loaded configuration: {json.dumps(app_config, indent=2)}")
     logger.debug(f"Loaded configuration: \n{json.dumps(app_config, indent=2)}")
 
     # 3. Add weather API from environment variables to config
