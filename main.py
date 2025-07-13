@@ -29,7 +29,7 @@ def main():
     except FileNotFoundError:
         print(f"Error: Configuration file not found at {config_path}.")
         print("Please run 'python configure.py' first to create your configuration.")
-        sys.exit(1)  # Exit if config file is missing
+        sys.exit(1)
     except json.JSONDecodeError as e:
         print(
             f"Error: Could not parse config.json. It might be corrupted. Details: {e}"
@@ -37,7 +37,7 @@ def main():
         print(
             "Please check your config/config.json file or re-run 'python configure.py'."
         )
-        sys.exit(1)  # Exit if config file is corrupted
+        sys.exit(1)
 
     # 2. Setup Logging based on loaded configuration
     logging_config = app_config.get("logging", {})
@@ -48,22 +48,19 @@ def main():
 
     logger = logging.getLogger(__name__)
     logger.info("Application starting...")
-    logger.debug(f"Loaded configuration: {json.dumps(app_config, indent=2)}")
+    #    logger.debug(f"Loaded configuration: {json.dumps(app_config, indent=2)}")
+    logger.debug(f"Loaded configuration: \n{json.dumps(app_config, indent=2)}")
 
-    # 3. Add sensitive data from environment variables to config
-    # Ensure 'weather' section exists if weather is enabled, otherwise get() will fail.
+    # 3. Add weather API from environment variables to config
     if app_config.get("weather", {}).get("enabled"):
         api_key = os.getenv("OPENWEATHER_API_KEY")
         if not api_key:
             logger.error(
                 "OPENWEATHER_API_KEY not found in environment variables. Weather display may not work."
             )
-            # You might want to disable weather display if key is missing
             app_config["weather"]["enabled"] = False
         else:
-            app_config["weather"]["api_key"] = (
-                api_key  # Add key to config for ScoreboardManager
-            )
+            app_config["weather"]["api_key"] = api_key
 
     # 4. Initialize and Run ScoreboardManager with the loaded config
     manager = ScoreboardManager(app_config)
