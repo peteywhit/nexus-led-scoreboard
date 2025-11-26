@@ -83,7 +83,7 @@ class ESPNDataParser:
                                                         E.g., {"nfl": ["1", "2"], "mlb": ["3"]}
         """
         self.favorite_team_ids = favorite_team_ids
-        logger.info("ESPNDataParser initialized.")
+        logger.info("ESPNDataParser initialized...")
 
     def parse_events(self, raw_data: Dict[str, Any]) -> List[Game]:
         """

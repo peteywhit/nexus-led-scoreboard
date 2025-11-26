@@ -20,7 +20,7 @@ class ESPNAPIFetcher:
     MIN_REQUEST_INTERVAL_SECONDS = 2
 
     def __init__(self):
-        logger.info("ESPNAPIFetcher initialized.")
+        logger.info("ESPNAPIFetcher initialized...")
         os.makedirs(self.CACHE_DIR, exist_ok=True)
         self._last_request_time = 0
 
@@ -33,7 +33,7 @@ class ESPNAPIFetcher:
     ) -> str:
         """
         Generates a unique file path for caching based on the URL, parameters,
-        optional game ID, or indicating it's a teams endpoint.
+        optional game ID, or indicating it's a teams' endpoint.
         """
         if game_id:
             filename = f"game_{game_id}.json"
@@ -60,7 +60,7 @@ class ESPNAPIFetcher:
                 if params
                 else ""
             )
-            filename = f"{endpoint_url.replace('https://', '').replace('/', '_').replace('.', '_')}_{param_str}.json"
+            filename = f"{endpoint_url.replace('http://', '').replace('/', '_').replace('.', '_')}_{param_str}.json"
             filename = filename[:200]  # truncate to avoid excessively long names
         return os.path.join(self.CACHE_DIR, filename)
 
@@ -117,7 +117,7 @@ class ESPNAPIFetcher:
         if cached_data:
             return cached_data
 
-        self._apply_rate_limit()
+#        self._apply_rate_limit()
 
         logger.info(
             f"Fetching new data for scoreboard from: {endpoint_base} with params: {params}"
@@ -160,7 +160,7 @@ class ESPNAPIFetcher:
         if cached_data:
             return cached_data
 
-        self._apply_rate_limit()
+#        self._apply_rate_limit()
 
         logger.info(f"Fetching new data for game ID {game_id} from: {endpoint}")
         try:
@@ -188,7 +188,7 @@ class ESPNAPIFetcher:
         Args:
             sport (str): The sport (e.g., 'football', 'baseball').
             league (str): The league (e.g., 'nfl', 'mlb').
-            limit (int): The maximum number of teams to return. Default to 1000.
+            limit (int): The maximum number of teams to return. Default to 1000 due to college sports.
 
         Returns:
             dict: The JSON response containing team data, or an empty dict on error.

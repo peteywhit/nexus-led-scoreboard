@@ -31,6 +31,7 @@ SPORTS_AND_LEAGUES = [
             {"name": "NFL", "value": "nfl"},
             {"name": "College Football", "value": "college-football"},
             {"name": "UFL", "value": "ufl"},
+            {"name": "CFL", "value": "cfl"},
         ],
     },
     {
@@ -39,19 +40,26 @@ SPORTS_AND_LEAGUES = [
         "leagues": [
             {"name": "MLB", "value": "mlb"},
             {"name": "College Baseball", "value": "college-baseball"},
+            {"name": "College Softball", "value": "college-softball"},
         ],
     },
     {
         "name": "Hockey 🏒",
         "value": "hockey",
-        "leagues": [{"name": "NHL", "value": "nhl"}],
+        "leagues": [
+            {"name": "NHL", "value": "nhl"},
+            {"name": "Men's College Hockey", "value": "mens-college-hockey"},
+            {"name": "Women's College Hockey", "value": "womens-college-hockey"},
+        ],
     },
     {
         "name": "Basketball 🏀",
         "value": "basketball",
         "leagues": [
             {"name": "NBA", "value": "nba"},
-            {"name": "College Basketball", "value": "college-basketball"},
+            {"name": "WNBA", "value": "wnba"},
+            {"name": "Men's College Basketball", "value": "mens-college-basketball"},
+            {"name": "Women's College Basketball", "value": "womens-college-basketball"},
         ],
     },
     {
@@ -59,10 +67,12 @@ SPORTS_AND_LEAGUES = [
         "value": "soccer",
         "leagues": [
             {"name": "MLS", "value": "usa.1"},
-            {"name": "Eng. Premier League", "value": "eng.1"},
-            {"name": "Eng. League Championship", "value": "eng.2"},
-            {"name": "Eng. League One", "value": "eng.3"},
-            {"name": "Eng. League Two", "value": "eng.4"},
+            {"name": "NWSL", "value": "usa.nwsl"},
+            {"name": "Premier League", "value": "eng.1"},
+            {"name": "EFL Championship", "value": "eng.2"},
+            {"name": "EFL League One", "value": "eng.3"},
+            {"name": "EFL League Two", "value": "eng.4"},
+            {"name": "Eng. FA Cup", "value": "eng.fa"},
             {"name": "Spanish LALIGA", "value": "esp.1"},
         ],
     },

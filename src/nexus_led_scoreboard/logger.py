@@ -4,7 +4,7 @@ from logging.handlers import RotatingFileHandler
 
 
 def setup_logging(
-    console_level: str = "INFO", file_level: str = "DEBUG", log_file_path: str = None
+    console_level: str, file_level: str, log_file_path: str = None
 ) -> None:
     """
     Sets up the application-wide logging configuration.
@@ -19,7 +19,7 @@ def setup_logging(
         logging.root.removeHandler(handler)
     logging.root.setLevel(logging.DEBUG)  # Set root to DEBUG to capture all messages
 
-    log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    log_format = "%(asctime)s - %(levelname)s - %(message)s"
     date_format = "%Y-%m-%d %H:%M:%S"
     formatter = logging.Formatter(log_format, datefmt=date_format)
 

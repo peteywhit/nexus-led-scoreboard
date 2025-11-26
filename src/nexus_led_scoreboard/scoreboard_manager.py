@@ -59,7 +59,7 @@ class ScoreboardManager:
         Runs the main scoreboard application loop.
         Continuously fetches data, determines display mode, and orchestrates display.
         """
-        logger.info("ScoreboardManager main loop started.")
+        logger.info("ScoreboardManager main loop started...")
         while True:
             try:
                 # 1. Fetch Data
@@ -217,7 +217,7 @@ class ScoreboardManager:
 
         self.last_data_fetch_time = datetime.now()
         logger.info(
-            f"Finished fetching and parsing data. Total games: {len(self.all_games_data)}"
+            f"Finished fetching and parsing all sport data. Total games: {len(self.all_games_data)}"
         )
 
     def _determine_overall_display_mode(
