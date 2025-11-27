@@ -117,7 +117,7 @@ class ESPNAPIFetcher:
         if cached_data:
             return cached_data
 
-#        self._apply_rate_limit()
+        #        self._apply_rate_limit()
 
         logger.info(
             f"Fetching new data for scoreboard from: {endpoint_base} with params: {params}"
@@ -160,7 +160,7 @@ class ESPNAPIFetcher:
         if cached_data:
             return cached_data
 
-#        self._apply_rate_limit()
+        #        self._apply_rate_limit()
 
         logger.info(f"Fetching new data for game ID {game_id} from: {endpoint}")
         try:

@@ -59,7 +59,10 @@ SPORTS_AND_LEAGUES = [
             {"name": "NBA", "value": "nba"},
             {"name": "WNBA", "value": "wnba"},
             {"name": "Men's College Basketball", "value": "mens-college-basketball"},
-            {"name": "Women's College Basketball", "value": "womens-college-basketball"},
+            {
+                "name": "Women's College Basketball",
+                "value": "womens-college-basketball",
+            },
         ],
     },
     {
