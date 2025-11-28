@@ -1,40 +1,8 @@
-# Byte-compiled / optimized / DLL files
+```gitignore
 __pycache__/
-*.pyc
-*.pyd
-*.pyo
-*.egg-info/
-.pytest_cache/
-
-# Distribution / packaging
-.Python
-env/
-venv/
-lib/
-build/
-dist/
-*.egg
-.tox/
-.mypy_cache/
-.coverage
-.ruff_cache/
 .env
-*.env
-logs/
 .venv
-
-# Editors
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Other common files
+venv/
+*.pyc
 *.log
-*.sqlite3
-
-# Project files
-config/config.json
-cache/
+logs/
